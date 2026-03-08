@@ -1,0 +1,246 @@
+{
+  "verification_date": "2026-03-08",
+  "courts": {
+    "islamabad_high_court": {
+      "name": "Islamabad High Court (IHC)",
+      "tier": "2_caution",
+      "overall_status": "partial_accessible",
+      "main_portal": "https://mis.ihc.gov.pk/",
+      "avoid_url": "https://ihc.gov.pk/",
+      "endpoints": {
+        "case_search": {
+          "url": "https://mis.ihc.gov.pk/frmCseSrch",
+          "status": "working",
+          "format": "AJAX JSON",
+          "backend_method": "srchCseIhc_ByInst",
+          "search_fields": [
+            "case_number (mandatory)",
+            "case_year (optional)",
+            "case_category (optional)",
+            "party_name (alphabetic)",
+            "fir_number (optional)",
+            "diary_number (optional)"
+          ],
+          "result_fields": [
+            "case_code",
+            "case_number",
+            "case_title",
+            "parties",
+            "bench_name",
+            "hearing_date",
+            "status"
+          ]
+        },
+        "order_search": {
+          "url": "https://mis.ihc.gov.pk/frmSrchOrdr",
+          "status": "working",
+          "format": "card_layout",
+          "search_methods": [
+            "keyword (6+ chars)",
+            "case_number",
+            "case_title_party (5+ chars)",
+            "judge_bench",
+            "citation",
+            "advanced_multi_field"
+          ],
+          "result_fields": [
+            "case_number",
+            "citation_reference",
+            "party_names",
+            "judge_composition",
+            "subject_classification",
+            "order_date",
+            "approval_status",
+            "discussed_laws"
+          ]
+        },
+        "library": {
+          "url": "https://mis.ihc.gov.pk/frmLibDtl",
+          "status": "accessible",
+          "resources": [
+            "digital_library",
+            "physical_catalog_18415_books",
+            "pakistan_law_site",
+            "law_journals_pld_scmr_etc"
+          ]
+        }
+      },
+      "judgment_pdfs": {
+        "url_pattern": "https://mis.ihc.gov.pk/attachments/judgements/[CASE_ID]/[FILE_NUMBER]/[FILENAME].pdf",
+        "example_urls": [
+          "https://mis.ihc.gov.pk/attachments/judgements/199260/1/W.P._NO._2494_OF_2025_638896524549921705.pdf",
+          "https://mis.ihc.gov.pk/attachments/judgements/172935/1/W.P._No.198_and_199-2024_638422384977043765.pdf"
+        ]
+      },
+      "case_types": [
+        "W.P. (Writ Petition)",
+        "I.C.A. (Islamabad Court Appeal)",
+        "I.T.R. (Income Tax Review)",
+        "Crl. Misc. (Criminal Miscellaneous)",
+        "S.T.R. (Sales Tax Review)",
+        "Cust. Ref. (Customs Reference)",
+        "F.A.O. (First Appeal in Order)",
+        "O.W.P. (Original Writ Petition)"
+      ],
+      "blocking": {
+        "captcha": "unknown",
+        "rate_limiting": "unknown",
+        "robots_txt": "timeout",
+        "anti_bot": "potential_stealth_needed"
+      },
+      "crawling_strategy": {
+        "rate_limit": "1-2 requests/second",
+        "backoff": "exponential_1s_5s_30s",
+        "stealth_mode": "required",
+        "session_persistence": "required",
+        "estimated_content": "30000+ judgments"
+      },
+      "recommendation": "YES - implement with caution"
+    },
+    "peshawar_high_court": {
+      "name": "Peshawar High Court (PHC)",
+      "tier": "1_quick_win",
+      "overall_status": "fully_accessible",
+      "main_portal": "https://www.peshawarhighcourt.gov.pk/",
+      "endpoints": {
+        "reported_judgments": {
+          "url": "https://www.peshawarhighcourt.gov.pk/PHCCMS/reportedJudgments.php",
+          "status": "working",
+          "technology": "jQuery DataTables",
+          "filters": {
+            "year": "2010-2026",
+            "judge": "dropdown_list",
+            "category": [
+              "All",
+              "Criminal",
+              "Civil",
+              "Revenue",
+              "Constitutional",
+              "Service",
+              "Corporate"
+            ]
+          },
+          "pagination": {
+            "engine": "DataTables",
+            "default_page_size": 25,
+            "configurable": true
+          }
+        },
+        "abbottabad_bench": {
+          "url": "https://peshawarhcatd.gov.pk/search_cases.phc",
+          "status": "working",
+          "search_methods": [
+            "party_details",
+            "fir_number",
+            "case_number"
+          ]
+        },
+        "mingora_bench": {
+          "url": "https://www.peshawarhcmb.gov.pk/",
+          "status": "working",
+          "features": [
+            "cause_lists",
+            "case_search",
+            "case_status_tracking",
+            "counsel_registry"
+          ]
+        },
+        "case_diary": {
+          "url": "https://diary.peshawarhighcourt.gov.pk/",
+          "status": "working",
+          "purpose": "online_case_diary_for_advocates"
+        }
+      },
+      "judgment_pdfs": {
+        "url_pattern": "https://peshawarhighcourt.gov.pk/PHCCMS/judgments/[CASE_REF].pdf",
+        "example_urls": [
+          "https://www.peshawarhighcourt.gov.pk/PHCCMS/judgments/236-of-15.pdf",
+          "https://peshawarhighcourt.gov.pk/PHCCMS/judgments/w.p-1372-M-of-2022.pdf"
+        ]
+      },
+      "blocking": {
+        "captcha": "none",
+        "rate_limiting": "none",
+        "robots_txt": "not_verified",
+        "anti_bot": "minimal"
+      },
+      "crawling_strategy": {
+        "rate_limit": "2-5 requests/second",
+        "stealth_mode": "not_required",
+        "separate_crawls": [
+          "main_phccms",
+          "abbottabad_bench",
+          "mingora_bench",
+          "case_diary"
+        ],
+        "estimated_content": "50000+ judgments"
+      },
+      "recommendation": "YES - highest priority"
+    },
+    "balochistan_high_court": {
+      "name": "Balochistan High Court (BHC)",
+      "tier": "3_do_not_crawl",
+      "overall_status": "blocked_by_incapsula",
+      "main_url": "https://bhc.gov.pk/",
+      "portal_url": "https://portal.bhc.gov.pk/",
+      "blocking_details": {
+        "incapsula": {
+          "status": "active_blocking",
+          "incident_id": "1347000610552490059-366543650274086726",
+          "blocks": "https://bhc.gov.pk/resources/judgments"
+        },
+        "portal_technology": "Nuxt.js SPA",
+        "portal_requirement": "JavaScript rendering"
+      },
+      "accessible_endpoints": [
+        "https://bhc.gov.pk/beta/introduction/about",
+        "https://bhc.gov.pk/beta/resources/case-status"
+      ],
+      "blocked_endpoints": [
+        "https://bhc.gov.pk/resources/judgments",
+        "https://portal.bhc.gov.pk/judgments/"
+      ],
+      "blocking": {
+        "captcha": "incapsula_active",
+        "rate_limiting": "strict",
+        "robots_txt": "unknown",
+        "anti_bot": "aggressive_waf"
+      },
+      "crawling_options": {
+        "option_a_direct_contact": {
+          "method": "email_court",
+          "effort": "low",
+          "success_rate": "70%",
+          "timeline": "2-4 weeks",
+          "recommended": true
+        },
+        "option_b_paid_service": {
+          "provider": "crawlbase.com",
+          "cost": "$50-200/month",
+          "effort": "high",
+          "success_rate": "80-90%",
+          "recommended": false
+        },
+        "option_c_hacky_bypass": {
+          "method": "stealth_mode_proxy_capsolver",
+          "effort": "very_high",
+          "success_rate": "<50%",
+          "risk": "permanent_ip_ban",
+          "recommended": false
+        }
+      },
+      "recommendation": "NO - contact court directly instead"
+    }
+  },
+  "summary": {
+    "total_estimated_judgment_content": "80000+ documents",
+    "tier_1_recommended": ["peshawar_high_court"],
+    "tier_2_recommended": ["islamabad_high_court"],
+    "tier_3_skip": ["balochistan_high_court"],
+    "implementation_order": [
+      "Phase 1 Week 1: PHC (Peshawar)",
+      "Phase 2 Week 2-3: IHC (Islamabad)",
+      "Phase 3 Week 4+: BHC (contact court or skip)"
+    ]
+  }
+}

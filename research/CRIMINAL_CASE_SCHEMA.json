@@ -1,0 +1,791 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pakistani Criminal Case Judgment Schema",
+  "description": "Complete schema for extracting and storing critical datapoints from Pakistani criminal case judgments for legal AI system",
+  "type": "object",
+  "required": [
+    "case_id",
+    "case_title",
+    "judgment_type",
+    "date_judgment",
+    "court_level",
+    "court_name"
+  ],
+  "properties": {
+    "case_identification": {
+      "type": "object",
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "description": "Unique case identifier"
+        },
+        "case_title": {
+          "type": "string",
+          "description": "Case parties (State v. Accused)"
+        },
+        "case_type": {
+          "type": "string",
+          "enum": ["trial", "appeal", "revision", "reference"],
+          "description": "Type of proceeding"
+        },
+        "case_number": {
+          "type": "string",
+          "description": "Official court case number"
+        },
+        "judgment_type": {
+          "type": "string",
+          "enum": ["conviction", "acquittal", "partial_conviction", "dismissal"],
+          "description": "Outcome of judgment"
+        },
+        "date_filed": {
+          "type": "string",
+          "format": "date",
+          "description": "Date case filed"
+        },
+        "date_judgment": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of judgment"
+        },
+        "case_duration_days": {
+          "type": "integer",
+          "description": "Days from filing to judgment"
+        },
+        "court_level": {
+          "type": "string",
+          "enum": ["trial_court", "high_court", "supreme_court", "special_court"],
+          "description": "Jurisdictional court level"
+        },
+        "court_name": {
+          "type": "string",
+          "description": "Specific court name (e.g., Lahore High Court)"
+        },
+        "bench_composition": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "judge_name": {
+                "type": "string"
+              },
+              "judge_role": {
+                "type": "string",
+                "enum": ["presiding", "member", "concurring", "dissenting"]
+              }
+            }
+          },
+          "description": "Judges hearing the case"
+        }
+      }
+    },
+    "jurisdiction": {
+      "type": "object",
+      "properties": {
+        "jurisdiction_type": {
+          "type": "string",
+          "enum": ["criminal", "terrorism", "narcotic", "hudood", "juvenile", "commercial"],
+          "description": "Subject matter jurisdiction"
+        },
+        "jurisdiction_province": {
+          "type": "string",
+          "enum": ["punjab", "sindh", "kpk", "balochistan", "islamabad"],
+          "description": "Provincial jurisdiction"
+        },
+        "forum_category": {
+          "type": "string",
+          "enum": ["murder", "theft", "sexual_assault", "terrorism", "drug_trafficking", "financial_crime"],
+          "description": "Case categorization"
+        },
+        "trial_court_jurisdiction": {
+          "type": "string",
+          "enum": ["district", "sessions", "additional_sessions"],
+          "description": "Original court jurisdiction"
+        },
+        "territorial_jurisdiction": {
+          "type": "string",
+          "description": "Geographic location (e.g., Karachi District)"
+        }
+      }
+    },
+    "offenses": {
+      "type": "object",
+      "properties": {
+        "ppc_sections_charged": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section": {
+                "type": "string",
+                "description": "PPC section number"
+              },
+              "title": {
+                "type": "string",
+                "description": "Offense name"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["capital", "life", "long_term_7plus", "medium_term_3to7", "short_term"]
+              },
+              "section_type": {
+                "type": "string",
+                "enum": ["substantive", "modifying", "alternate"]
+              }
+            }
+          }
+        },
+        "special_law_offense": {
+          "type": "string",
+          "enum": ["anti_terrorism_act", "narcotics_cnsa", "hudood_ordinance", "juvenile_justice", "acid_control_act", "cyber_crime"],
+          "description": "Special statute offense if applicable"
+        },
+        "murder_category": {
+          "type": "string",
+          "enum": ["qatal_i_amd_premeditated", "qatal_i_khata_unintentional", "qatal_i_azhar_heat_of_passion"],
+          "description": "Murder type if applicable"
+        },
+        "premeditation_indicators": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["prior_enmity", "weapon_procurement", "planning_evidence", "time_gap_between_act_and_death"]
+          }
+        },
+        "motive_identified": {
+          "type": "string",
+          "enum": ["family_dispute", "property", "enmity", "honor", "financial", "love_affair", "political", "sectarian", "unknown"],
+          "description": "Identified motive for crime"
+        }
+      }
+    },
+    "parties": {
+      "type": "object",
+      "properties": {
+        "prosecution": {
+          "type": "object",
+          "properties": {
+            "state_complainant": {
+              "type": "string"
+            },
+            "prosecuting_agency": {
+              "type": "string"
+            },
+            "police_station_fir": {
+              "type": "string"
+            },
+            "fir_number": {
+              "type": "string"
+            },
+            "investigating_officer_name": {
+              "type": "string"
+            },
+            "io_rank": {
+              "type": "string"
+            },
+            "prosecutor_name": {
+              "type": "string"
+            }
+          }
+        },
+        "accused": {
+          "type": "object",
+          "properties": {
+            "full_name": {
+              "type": "string"
+            },
+            "aliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dob": {
+              "type": "string",
+              "format": "date"
+            },
+            "age_at_offense": {
+              "type": "integer"
+            },
+            "age_determination_method": {
+              "type": "string",
+              "enum": ["birth_certificate", "school_records", "medical_examination", "claimed_age"]
+            },
+            "previous_convictions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "case_id": {
+                    "type": "string"
+                  },
+                  "offense": {
+                    "type": "string"
+                  },
+                  "sentence": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                }
+              }
+            },
+            "criminal_history_count": {
+              "type": "integer"
+            },
+            "address": {
+              "type": "string"
+            },
+            "socio_economic_status": {
+              "type": "string",
+              "enum": ["poor", "lower_middle", "middle", "upper_middle", "wealthy"]
+            },
+            "education_level": {
+              "type": "string",
+              "enum": ["illiterate", "primary", "matric", "intermediate", "graduate", "postgraduate"]
+            }
+          }
+        },
+        "victim": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "age_at_death": {
+              "type": "integer"
+            },
+            "relationship_to_accused": {
+              "type": "string",
+              "enum": ["spouse", "child", "parent", "sibling", "employer", "servant", "stranger"]
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "evidence_type_distribution": {
+          "type": "object",
+          "properties": {
+            "direct_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "circumstantial_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "hearsay_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "expert_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "physical_evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_number": {
+                "type": "integer"
+              },
+              "description": {
+                "type": "string"
+              },
+              "recovery_location": {
+                "type": "string"
+              },
+              "recovery_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "custody_chain_breaks": {
+                "type": "boolean"
+              },
+              "recovery_witnesses": {
+                "type": "integer"
+              },
+              "recovery_witnesses_examined": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "chain_of_custody": {
+          "type": "object",
+          "properties": {
+            "documented": {
+              "type": "boolean"
+            },
+            "complete": {
+              "type": "boolean"
+            },
+            "breaks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": ["minor", "moderate", "severe"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "forensic_evidence": {
+          "type": "object",
+          "properties": {
+            "dna_test_conducted": {
+              "type": "boolean"
+            },
+            "dna_lab_name": {
+              "type": "string"
+            },
+            "dna_match_accused": {
+              "type": "boolean"
+            },
+            "dna_confidence_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "fingerprints_found": {
+              "type": "boolean"
+            },
+            "fingerprints_matched": {
+              "type": "boolean"
+            },
+            "ballistics_test_done": {
+              "type": "boolean"
+            },
+            "ballistics_match": {
+              "type": "boolean"
+            },
+            "toxicology_test": {
+              "type": "boolean"
+            },
+            "trace_evidence_collected": {
+              "type": "boolean"
+            }
+          }
+        },
+        "witness_evidence": {
+          "type": "object",
+          "properties": {
+            "eyewitness_count": {
+              "type": "integer"
+            },
+            "prosecution_witness_count": {
+              "type": "integer"
+            },
+            "defense_witness_count": {
+              "type": "integer"
+            },
+            "expert_witness_present": {
+              "type": "boolean"
+            },
+            "expert_type": {
+              "type": "string",
+              "enum": ["forensic_pathologist", "dna_expert", "ballistics", "medical", "psychological", "financial"]
+            },
+            "expert_credibility": {
+              "type": "string",
+              "enum": ["highly_credible", "credible", "partially_credible", "not_credible"]
+            },
+            "conflicting_expert_opinions": {
+              "type": "boolean"
+            }
+          }
+        },
+        "circumstantial_evidence": {
+          "type": "object",
+          "properties": {
+            "motive_evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "opportunity_evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "presence_at_crime_scene": {
+              "type": "string",
+              "enum": ["confirmed_eyewitness", "circumstantial", "unproven"]
+            },
+            "last_seen_together": {
+              "type": "boolean"
+            },
+            "possession_recovery": {
+              "type": "boolean"
+            },
+            "consciousness_of_guilt": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["fled_jurisdiction", "attempted_suicide", "destroyed_evidence", "bribed_witness"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "procedures": {
+      "type": "object",
+      "properties": {
+        "fir_defects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["recording_delay", "vague_description", "based_on_suspicion", "section_objectionable"]
+          }
+        },
+        "investigation_defects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["key_witness_not_examined", "scene_not_visited", "evidence_not_collected", "notes_not_recorded"]
+          }
+        },
+        "arrest_defects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["unlawful_arrest", "no_warrant", "torture_allegations", "illegal_custody_extension"]
+          }
+        },
+        "section_161_defects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["not_given_to_defense", "not_examined_in_court", "inconsistent_with_testimony"]
+          }
+        },
+        "section_164_defects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["police_present", "involuntary_statement", "no_translation", "no_counsel"]
+          }
+        },
+        "search_defects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["no_warrant", "no_witnesses", "no_memo", "contamination_risk"]
+          }
+        }
+      }
+    },
+    "witness_data": {
+      "type": "object",
+      "properties": {
+        "eyewitness_credibility": {
+          "type": "object",
+          "properties": {
+            "proximity_meters": {
+              "type": "integer"
+            },
+            "visibility_conditions": {
+              "type": "string",
+              "enum": ["bright_daylight", "twilight", "darkness_no_light", "darkness_with_light"]
+            },
+            "observation_duration_seconds": {
+              "type": "integer"
+            },
+            "familiarity_with_accused": {
+              "type": "string",
+              "enum": ["familiar", "stranger", "glimpse_only"]
+            },
+            "identification_procedure_defects": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "in_court_identification": {
+              "type": "boolean"
+            },
+            "prior_statement_consistent": {
+              "type": "boolean"
+            }
+          }
+        },
+        "witness_credibility_factors": {
+          "type": "object",
+          "properties": {
+            "education_level": {
+              "type": "string"
+            },
+            "character": {
+              "type": "string",
+              "enum": ["good", "neutral", "questionable", "bad"]
+            },
+            "criminal_record": {
+              "type": "boolean"
+            },
+            "impeachment_grounds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["prior_conviction", "inconsistent_statement", "interest_in_case", "bias", "enmity"]
+              }
+            },
+            "relationship_to_parties": {
+              "type": "string",
+              "enum": ["family_member", "friend", "enemy", "neutral"]
+            },
+            "bias_alleged": {
+              "type": "boolean"
+            }
+          }
+        },
+        "cross_examination": {
+          "type": "object",
+          "properties": {
+            "conducted": {
+              "type": "boolean"
+            },
+            "duration_minutes": {
+              "type": "integer"
+            },
+            "quality": {
+              "type": "string",
+              "enum": ["thorough_effective", "adequate", "superficial", "incompetent"]
+            },
+            "witness_admission": {
+              "type": "boolean"
+            },
+            "hostile_witness_declared": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "trial_procedure": {
+      "type": "object",
+      "properties": {
+        "charges_framed_properly": {
+          "type": "boolean"
+        },
+        "charges_explained_in_language": {
+          "type": "string",
+          "enum": ["urdu", "english_with_translation", "local_language"]
+        },
+        "plea_recorded_clear": {
+          "type": "boolean"
+        },
+        "plea_voluntary": {
+          "type": "boolean"
+        },
+        "accused_legal_representation": {
+          "type": "string",
+          "enum": ["represented_by_advocate", "pro_bono", "self_represented"]
+        },
+        "defense_adequacy": {
+          "type": "string",
+          "enum": ["thorough_competent", "adequate", "inadequate", "ineffective"]
+        },
+        "trial_start_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "trial_completion_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "adjournment_count": {
+          "type": "integer"
+        },
+        "adjournment_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "bail_custody": {
+      "type": "object",
+      "properties": {
+        "bail_applications_count": {
+          "type": "integer"
+        },
+        "bail_granted_amount_pkr": {
+          "type": "number"
+        },
+        "pre_arrest_bail_status": {
+          "type": "string",
+          "enum": ["granted", "denied", "not_sought"]
+        },
+        "post_arrest_bail_status": {
+          "type": "string",
+          "enum": ["granted", "denied", "pending"]
+        },
+        "bail_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "police_custody_days": {
+          "type": "integer"
+        },
+        "judicial_custody_obtained": {
+          "type": "boolean"
+        },
+        "custody_in_jail_months": {
+          "type": "number"
+        },
+        "custody_credited_to_sentence": {
+          "type": "boolean"
+        }
+      }
+    },
+    "sentencing": {
+      "type": "object",
+      "properties": {
+        "conviction_certainty": {
+          "type": "string",
+          "enum": ["beyond_reasonable_doubt", "moral_certainty", "doubt_exists"]
+        },
+        "sentence_imposed_years": {
+          "type": "integer"
+        },
+        "sentence_imposed_months": {
+          "type": "integer"
+        },
+        "sentence_type": {
+          "type": "string",
+          "enum": ["death_penalty", "life_imprisonment", "rigorous_imprisonment", "simple_imprisonment", "fine"]
+        },
+        "aggravating_factors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["premeditation", "brutality", "vulnerable_victim", "abuse_of_trust", "multiple_victims", "prior_conviction", "lack_of_remorse"]
+          }
+        },
+        "mitigating_factors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["youth", "first_offense", "good_character", "provocation", "mental_illness", "duress", "family_hardship", "remorse"]
+          }
+        },
+        "sentence_explained": {
+          "type": "boolean"
+        }
+      }
+    },
+    "appeals": {
+      "type": "object",
+      "properties": {
+        "appeal_filed": {
+          "type": "boolean"
+        },
+        "appeal_filed_by": {
+          "type": "string",
+          "enum": ["prosecution", "defense", "both"]
+        },
+        "appeal_case_number": {
+          "type": "string"
+        },
+        "appeal_filing_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "appeal_hearing_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "appeal_verdict": {
+          "type": "string",
+          "enum": ["appeal_allowed_conviction_quashed", "appeal_dismissed_conviction_upheld", "appeal_partially_allowed_sentence_reduced"]
+        },
+        "supreme_court_petition_filed": {
+          "type": "boolean"
+        },
+        "final_verdict_status": {
+          "type": "string",
+          "enum": ["final_binding", "under_appeal", "awaiting_supreme_court"]
+        }
+      }
+    },
+    "quality_metrics": {
+      "type": "object",
+      "properties": {
+        "direct_evidence_strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "circumstantial_evidence_strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "forensic_evidence_strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "witness_credibility_aggregate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "overall_prosecution_strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "conviction_strength": {
+          "type": "string",
+          "enum": ["unassailable", "strong", "adequate", "weak", "very_weak"]
+        },
+        "procedural_compliance_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "chain_of_custody_quality": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "appellable_defects_count": {
+          "type": "integer"
+        },
+        "judgment_reasoning_quality": {
+          "type": "string",
+          "enum": ["thorough_detailed", "adequate", "superficial", "contradictory"]
+        }
+      }
+    }
+  }
+}
